@@ -85,5 +85,15 @@ namespace MvcCore.repositories
             this.adapter.Update(this.table);
             this.table.AcceptChanges();
         }
+
+        public void InsertarDepartamento(int iddepartametno, string nombre, string localidad, string imagen)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateDepartamento(int iddepartamento, string nombre, string localidad, string imagen)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

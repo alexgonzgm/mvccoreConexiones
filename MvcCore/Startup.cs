@@ -32,17 +32,20 @@ namespace MvcCore
             string cadenaMysql = this.Configuration.GetConnectionString("cadenamysql");
 
             services.AddTransient<PathProvider>();
+            services.AddTransient<UploadService>();
+            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddTransient<MailService>();
 
             //**********REPOSIORIES***************
             services.AddTransient<RepositoryJoyerias>();
             services.AddTransient<RepositoryAlumnos>();
-           // services.AddTransient<IRepositoryHospital, RepositoryHospital>();
+            services.AddTransient<IRepositoryHospital, RepositoryHospital>();
             //*****SQL
-            //  services.AddTransient<IRepositoryDepartamentos ,RepositoryDepartamentosSQL>();
+            // services.AddTransient<IRepositoryDepartamentos ,RepositoryDepartamentosSQL>();
             //*****ORACLE
            services.AddTransient<IRepositoryDepartamentos>(x => new RepositoryDepartamentosOracle(cadenaoracle));
             //*****MySql
-            // services.AddTransient<IRepositoryDepartamentos,RepositoryDepartamentosMySql>();
+             //services.AddTransient<IRepositoryDepartamentos,RepositoryDepartamentosMySql>();
 
             //**********CONTEXT***************
 

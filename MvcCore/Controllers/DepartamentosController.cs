@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MvcCore.Helpers;
 using MvcCore.Models;
 using MvcCore.repositories;
 
@@ -11,9 +14,11 @@ namespace MvcCore.Controllers
     public class DepartamentosController : Controller
     {
         private IRepositoryHospital repository;
-        public DepartamentosController(IRepositoryHospital repository)
+        private PathProvider provider;
+        public DepartamentosController(IRepositoryHospital repository , PathProvider provider)
         {
             this.repository = repository;
+            this.provider = provider;
         }
         public IActionResult Index()
         {
@@ -25,9 +30,15 @@ namespace MvcCore.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Departamento dep)
+        public async Task<IActionResult> Create(Departamento dep , IFormFile ficheroimagen)
         {
-            this.repository.InsertarDepartamento(dep.IdDepartamento, dep.Nombre, dep.Localidad);
+            string filename = ficheroimagen.FileName;
+            string path = this.provider.MapPath(filename, Folders.Images);
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await ficheroimagen.CopyToAsync(stream);
+            }
+            this.repository.InsertarDepartamento(dep.IdDepartamento, dep.Nombre, dep.Localidad,filename);
             return RedirectToAction("Index");
         }
 
@@ -37,15 +48,21 @@ namespace MvcCore.Controllers
             return View(this.repository.BuscatDepartamento(iddepartamento));
         }
 
-        public IActionResult Edit(int iddepartamento)
+        public IActionResult Edit(int iddepartamento )
         {
 
             return View(this.repository.BuscatDepartamento(iddepartamento));
         }
         [HttpPost]
-        public IActionResult Edit(Departamento dep)
+        public async Task<IActionResult> Edit(Departamento dep  , IFormFile ficheroimagen)
         {
-            this.repository.UpdateDepartamento(dep.IdDepartamento, dep.Nombre, dep.Localidad);
+            string filename = ficheroimagen.FileName;
+            string path = this.provider.MapPath(filename, Folders.Images);
+            using (var stream = new FileStream(path , FileMode.Create))
+            {
+                await ficheroimagen.CopyToAsync(stream);
+            }
+            this.repository.UpdateDepartamento(dep.IdDepartamento, dep.Nombre, dep.Localidad, filename);
             return RedirectToAction("Index");
         }
 

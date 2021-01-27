@@ -72,7 +72,29 @@ namespace MvcCore.repositories
             this.context.SaveChanges();
         }
 
-       
+        public void InsertarDepartamento(int iddepartametno, string nombre, string localidad, string imagen)
+        {
+            Departamento departamento = new Departamento(); 
+            departamento.IdDepartamento = iddepartametno;
+            departamento.Nombre = nombre;
+            departamento.Localidad = localidad;
+            departamento.Imagen = imagen;
+            this.context.Departamentos.Add(departamento);
+            this.context.SaveChanges();
+
+        }
+
+        public void UpdateDepartamento(int iddepartamento, string nombre, string localidad, string imagen)
+        {
+
+            Departamento departamento = this.BuscatDepartamento(iddepartamento);
+            departamento.Nombre = nombre;
+            departamento.Localidad = localidad;
+            departamento.Imagen = imagen;
+            this.context.SaveChanges();
+        }
+
+
 
         #endregion
 
